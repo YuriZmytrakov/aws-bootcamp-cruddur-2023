@@ -32,18 +32,3 @@ The `/journal` directory contains
 - [ ] [Week 12](journal/week12.md)
 - [ ] [Week 13](journal/week13.md)
 
-
-
-
-export HONEYCOMB_API_KEY="XTx8pH2Lq87lxX5YcqmVmA"
-export HONEYCOMB_SERVICE_NAME="Cruddur"
-gp env HONEYCOMB_API_KEY="XTx8pH2Lq87lxX5YcqmVmA"
-gp env HONEYCOMB_SERVICE_NAME="Cruddur"
-
-
-OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
-OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
-OTEL_SERVICE_NAME: "${Crudder}"
-
-export ROLLBAR_ACCESS_TOKEN="be2ebb5842b84a7cb1abd5fea96e761a"
-gp env ROLLBAR_ACCESS_TOKEN="be2ebb5842b84a7cb1abd5fea96e761a"
