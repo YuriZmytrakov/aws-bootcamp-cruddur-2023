@@ -44,3 +44,6 @@ gp env HONEYCOMB_SERVICE_NAME="Cruddur"
 OTEL_EXPORTER_OTLP_ENDPOINT: "https://api.honeycomb.io"
 OTEL_EXPORTER_OTLP_HEADERS: "x-honeycomb-team=${HONEYCOMB_API_KEY}"
 OTEL_SERVICE_NAME: "${Crudder}"
+
+export ROLLBAR_ACCESS_TOKEN="be2ebb5842b84a7cb1abd5fea96e761a"
+gp env ROLLBAR_ACCESS_TOKEN="be2ebb5842b84a7cb1abd5fea96e761a"
