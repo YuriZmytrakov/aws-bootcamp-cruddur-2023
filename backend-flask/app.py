@@ -21,14 +21,14 @@ from services.messages import *
 from services.create_message import *
 from services.show_activity import *
 
+from lib.CognitoTokenVerification import CognitoTokenVerification
+
 # Initialize tracing and an exporter that can send data to Honeycomb
 provider = TracerProvider()
 processor = BatchSpanProcessor(OTLPSpanExporter())
 provider.add_span_processor(processor)
 trace.set_tracer_provider(provider)
 tracer = trace.get_tracer(__name__)
-
-
 
 import watchtower
 import logging
@@ -49,6 +49,13 @@ LOGGER.info("HomeActivities")
 
 # Initialize automatic instrumentation with Flask
 app = Flask(__name__)
+
+cognito_token_verification = CognitoTokenVerification(
+  user_pool_id = os.getenv("AWS_COGNITO_USER_POOL_ID")
+  user_pool_client_id = os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID")
+  region = os.getenv("AWS_DEFAULT_REGION")
+)
+
 FlaskInstrumentor().instrument_app(app)
 RequestsInstrumentor().instrument()
 
@@ -72,11 +79,19 @@ def init_rollbar():
 frontend = os.getenv('FRONTEND_URL')
 backend = os.getenv('BACKEND_URL')
 origins = [frontend, backend]
+# cors = CORS(
+#   app, 
+#   resources={r"/api/*": {"origins": origins}},
+#   expose_headers="location,link",
+#   allow_headers="content-type,if-modified-since",
+#   methods="OPTIONS,GET,HEAD,POST"
+# )
+
 cors = CORS(
   app, 
   resources={r"/api/*": {"origins": origins}},
-  expose_headers="location,link",
-  allow_headers="content-type,if-modified-since",
+  headers=['Content-Type', 'Authorization'], 
+  expose_headers='Authorization',
   methods="OPTIONS,GET,HEAD,POST"
 )
 
