@@ -31,6 +31,7 @@ export default function SigninPage() {
     event.preventDefault();
     try {
       const user = await Auth.signIn(email, password);
+      console.log("user: ", user)
       localStorage.setItem("access_token", user.signInUserSession.accessToken.jwtToken);
       window.location.href = "/";
     } catch (error) {
