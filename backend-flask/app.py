@@ -21,7 +21,7 @@ from services.messages import *
 from services.create_message import *
 from services.show_activity import *
 
-from lib.CognitoTokenVerification import CognitoTokenVerification
+from lib.cognito_jwt_token import CognitoJwtToken, extract_access_token, TokenVerifyError
 
 # Initialize tracing and an exporter that can send data to Honeycomb
 provider = TracerProvider()
@@ -50,10 +50,10 @@ LOGGER.info("HomeActivities")
 # Initialize automatic instrumentation with Flask
 app = Flask(__name__)
 
-cognito_token_verification = CognitoTokenVerification(
-  user_pool_id = os.getenv("AWS_COGNITO_USER_POOL_ID")
-  user_pool_client_id = os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID")
-  region = os.getenv("AWS_DEFAULT_REGION")
+cognito_jwt_token = CognitoJwtToken(
+  user_pool_id=os.getenv("AWS_COGNITO_USER_POOL_ID"),
+  user_pool_client_id=os.getenv("AWS_COGNITO_USER_POOL_CLIENT_ID"),
+  region=os.getenv("AWS_DEFAULT_REGION")
 )
 
 FlaskInstrumentor().instrument_app(app)
@@ -137,6 +137,19 @@ def data_create_message():
 
 @app.route("/api/activities/home", methods=['GET'])
 def data_home():
+  app.logger.debug("Authorization:")
+  app.logger.debug(request.headers)
+  access_token = extract_access_token(request.headers)
+  try:
+    claims = cognito_jwt_token.verify(access_token)
+    app.logger.debug("Authenticated successfully!")
+    app.logger.debug(claims)
+  except TokenVerifyError as e:
+    app.logger.debug("Unathenticated!")
+    app.logger.debug(e)
+    # _ = request.data
+    # abort(make_response(jsonify(message=str(e)), 401))
+
   data = HomeActivities.run(logger = LOGGER)
   return data, 200
 
