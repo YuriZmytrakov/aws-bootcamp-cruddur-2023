@@ -2,6 +2,7 @@ tasks:
   - name: aws-cli
     env:
       AWS_CLI_AUTO_PROMPT: on-partial
+      CONNECTION_URL: "postgresql://postgres:password@localhost:5432/cruddur"
     init: |
       cd /workspace
       curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"

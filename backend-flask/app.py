@@ -3,6 +3,8 @@ from flask import request
 from flask_cors import CORS, cross_origin
 import os
 
+from lib.db import pool
+
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
 from opentelemetry.instrumentation.requests import RequestsInstrumentor
@@ -68,7 +70,7 @@ def init_rollbar():
         rollbar_access_token,
         # environment name
         'production',
-        # server root directory, makes tracebacks prettier
+        # server my directory, makes tracebacks prettier
         root=os.path.dirname(os.path.realpath(__file__)),
         # flask already sets up logging
         allow_logging_basic_config=False)
