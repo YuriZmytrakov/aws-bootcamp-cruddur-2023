@@ -6,11 +6,9 @@ opentelemetry-exporter-otlp-proto-http
 opentelemetry-instrumentation-flask 
 opentelemetry-instrumentation-requests
 watchtower
-
 blinker
 rollbar
-
+psycopg2-binary
 python-jose
-
 psycopg[binary]
 psycopg[pool]
