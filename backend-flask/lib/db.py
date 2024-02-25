@@ -14,7 +14,13 @@ class Db:
     print(f'{blue} SQL Params:{no_color}')
     for key, value in params.items():
       print(key, ":", value)
-  
+
+  def print_sql(self,title,sql):
+    cyan = '\033[96m'
+    no_color = '\033[0m'
+    print(f'{cyan} SQL STATEMENT-[{title}]------{no_color}')
+    print(sql)
+
   def init_pool(self):
     connection_url = os.getenv("CONNECTION_URL")
     self.pool = ConnectionPool(connection_url)
@@ -34,48 +40,26 @@ class Db:
       template_content = f.read()
     return template_content
 
-
-  def query_commit(self, sql, *kwargs):
+  def query_commit(self,sql,params={}):
+    self.print_sql('commit with returning',sql)
 
     pattern = r"\bRETURNING\b"
     is_returning_id = re.search(pattern, sql)
 
     try:
-      conn =  self.pool.connection()
-      cur = conn.cursor()
-      cur.execute(sql, params)
-      if is_returning_id:
-        returning_id = cur.getchone()[0]
-      conn.commit() 
-      if is_returning_id:
-        return returning_id
-
+      with self.pool.connection() as conn:
+        cur =  conn.cursor()
+        cur.execute(sql,params)
+        if is_returning_id:
+          returning_id = cur.fetchone()[0]
+        conn.commit() 
+        if is_returning_id:
+          return returning_id
     except Exception as err:
       self.print_sql_err(err)
 
-  # def query_commit(self, sql):
-  #   try:
-  #     conn =  self.pool.connection()
-  #     cur = conn.cursor()
-  #     cur.execute(sql)
-  #     conn.commit() 
-  #   except Exception as err:
-  #     self.print_sql_err(err)
-
-  # def query_array_json(self):
-  #   print("query_array_json: ")
-  #   print(sql)
-  #   wrapped_query = self.query_wrap_array(sql)
-  #   with self.pool.connection() as conn:
-  #     with conn.cursor() as cur:
-  #       cur.execute(wrapped_query)
-  #       # this will return a tuple
-  #       # the first field being the data
-  #       json = cur.fetchone()
-  #       return json[0]
-
-  def query_array_json(self, sql, params={}):
-    print('array: ',sql)
+  def query_array_json(self,sql,params={}):
+    self.print_sql('array',sql)
 
     wrapped_sql = self.query_wrap_array(sql)
     with self.pool.connection() as conn:
