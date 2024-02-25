@@ -3,7 +3,7 @@ from flask import request
 from flask_cors import CORS, cross_origin
 import os
 
-from lib.db import pool
+# from lib.db import pool
 
 from opentelemetry import trace
 from opentelemetry.instrumentation.flask import FlaskInstrumentor
