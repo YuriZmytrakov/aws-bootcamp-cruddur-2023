@@ -2,14 +2,38 @@ from psycopg_pool import ConnectionPool
 import os
 import re
 import sys
+from flask import current_app as app
 
 class Db:
   def __init__(self):
     self.init_pool()
+
+  def print_params(self,params):
+    blue = '\033[94m'
+    no_color = '\033[0m'
+    print(f'{blue} SQL Params:{no_color}')
+    for key, value in params.items():
+      print(key, ":", value)
   
   def init_pool(self):
     connection_url = os.getenv("CONNECTION_URL")
     self.pool = ConnectionPool(connection_url)
+
+  def template(self, *args):
+    pathing = list((app.root_path,'db','sql',) + args)
+    pathing[-1] = pathing[-1] + ".sql"
+
+    template_path = os.path.join(*pathing)
+
+    green = '\033[92m'
+    no_color = '\033[0m'
+    print("\n")
+    print(f'{green} Load SQL Template: {template_path} {no_color}')
+
+    with open(template_path, 'r') as f:
+      template_content = f.read()
+    return template_content
+
 
   def query_commit(self, sql, *kwargs):
 
@@ -50,7 +74,7 @@ class Db:
   #       json = cur.fetchone()
   #       return json[0]
 
-  def query_array_json(self,sql,params={}):
+  def query_array_json(self, sql, params={}):
     print('array: ',sql)
 
     wrapped_sql = self.query_wrap_array(sql)
@@ -60,17 +84,21 @@ class Db:
         json = cur.fetchone()
         return json[0]
 
-  def query_object_json(self, sql):
+  def query_object_json(self, sql, params={}):
     print("query_object_json: ")
+    self.print_params(params)
     print(sql)
     wrapped_sql = self.query_wrap_object(sql)
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
-        cur.execute(wrapped_sql)
+        cur.execute(wrapped_sql, params)
         # this will return a tuple
         # the first field being the data
         json = cur.fetchone()
-        return json[0]
+        if json == None:
+          return "{}"
+        else:
+          return json[0]
 
   def query_wrap_object(self, template):
     sql = f"""
