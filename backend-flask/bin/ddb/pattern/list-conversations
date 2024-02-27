@@ -6,9 +6,12 @@ import json
 import os
 import datetime
 
+# Add the parent directory of the current script to sys.path
 current_path = os.path.dirname(os.path.abspath(__file__))
 parent_path = os.path.abspath(os.path.join(current_path, '..', '..', '..'))
 sys.path.append(parent_path)
+
+# Now you can import the module
 from lib.db import db
 
 attrs = {
@@ -23,15 +26,15 @@ dynamodb = boto3.client('dynamodb',**attrs)
 table_name = 'cruddur-messages'
 
 def get_my_user_uuid():
-  sql = """
+  sql = f"""
     SELECT 
       users.uuid
     FROM users
     WHERE
       users.handle =%(handle)s
   """
-  uuid = db.query_value(sql,{
-    'handle':  'yuri.zmytrakov'
+  uuid = db.query_value(sql, {
+    'handle':  'andrewbrown'
   })
   return uuid
 

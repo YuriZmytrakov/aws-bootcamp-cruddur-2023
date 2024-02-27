@@ -111,8 +111,8 @@ class Db:
     print ("\npsycopg ERROR:", err, "on line number:", line_num)
     print ("psycopg traceback:", traceback, "-- type:", err_type)
 
-  def query_value(self, title, sql, params={}):
-    self.print_sql('value', sql, params)
+  def query_value(self,sql,params={}):
+    self.print_sql('value',sql,params)
     with self.pool.connection() as conn:
       with conn.cursor() as cur:
         cur.execute(sql,params)
