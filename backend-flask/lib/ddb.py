@@ -7,7 +7,8 @@ import botocore.exceptions
 
 class Ddb:
   def client():
-    endpoint_url = os.getenv("AWS_ENDPOINT_URL")
+    # endpoint_url = os.getenv("AWS_ENDPOINT_URL")
+    endpoint_url = 'http://dynamodb-local:8000'
     if endpoint_url:
       attrs = { 'endpoint_url': endpoint_url }
     else:
@@ -15,16 +16,17 @@ class Ddb:
     dynamodb = boto3.client('dynamodb',**attrs)
     return dynamodb
 
-  def list_message_groups(client,my_user_uuid):
-    # year = str(datetime.now().year)
+  def list_message_groups(client,my_user_uuid):    
+    print(f"my-uuid: {my_user_uuid}")
     table_name = 'cruddur-messages'
+    year = str(datetime.now().year)
     query_params = {
       'TableName': table_name,
       'KeyConditionExpression': 'pk = :pk AND begins_with(sk,:year)',
       'ScanIndexForward': False,
       'Limit': 20,
       'ExpressionAttributeValues': {
-        # ':year': {'S': year },
+        ':year': {'S': year },
         ':pk': {'S': f"GRP#{my_user_uuid}"}
       }
     }
@@ -74,6 +76,7 @@ class Ddb:
         'created_at': created_at
       })
     return results
+
   def create_message(client,message_group_uuid, message, my_user_uuid, my_user_display_name, my_user_handle):
     now = datetime.now(timezone.utc).astimezone().isoformat()
     created_at = now
