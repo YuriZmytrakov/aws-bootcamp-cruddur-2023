@@ -192,7 +192,7 @@ def data_create_message():
     app.logger.debug(e)
     return {}, 401
 
-  
+
 
 @app.route("/api/activities/home", methods=['GET'])
 def data_home(cognito_user_id=None):
