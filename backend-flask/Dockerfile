@@ -1,6 +1,7 @@
 # FROM python:3.10-slim-buster
 FROM 528949102142.dkr.ecr.us-east-2.amazonaws.com/cruddur-python:3.10-slim-buster
 
+
 WORKDIR /backend-flask
 
 COPY requirements.txt requirements.txt
