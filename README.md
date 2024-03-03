@@ -32,8 +32,14 @@ The `/journal` directory contains
 - [ ] [Week 12](journal/week12.md)
 - [ ] [Week 13](journal/week13.md)
 
-REACT_AWS_PROJECT_REGION
-REACT_APP_AWS_COGNITO_IDENTITY_POOL_ID
-REACT_APP_AWS_COGNITO_REGION
-REACT_APP_AWS_USER_POOLS_ID
-REACT_APP_CLIENT_ID
+
+
+
+
+aws ecs execute-command \
+    --region $AWS_DEFAULT_REGION
+    --cluster cruddur \
+    --task arn:aws:ecs:us-east-2:528949102142:task/cruddur/3d13ac27e6164220a3c91e4ef9eefc91 \
+    --container backend-flask \
+    --command "/bin/bash" \
+    --interactive
