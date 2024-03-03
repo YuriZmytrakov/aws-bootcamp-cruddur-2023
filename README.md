@@ -37,9 +37,10 @@ The `/journal` directory contains
 
 
 aws ecs execute-command \
-    --region $AWS_DEFAULT_REGION
+    --region $AWS_DEFAULT_REGION \
     --cluster cruddur \
-    --task arn:aws:ecs:us-east-2:528949102142:task/cruddur/3d13ac27e6164220a3c91e4ef9eefc91 \
+    --task df012487e0b54ace91af1572641ded84 \
     --container backend-flask \
     --command "/bin/bash" \
     --interactive
+
