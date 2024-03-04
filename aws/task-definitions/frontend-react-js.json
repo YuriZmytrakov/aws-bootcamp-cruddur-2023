@@ -11,7 +11,7 @@
     "containerDefinitions": [
       {
         "name": "frontend-react-js",
-        "image": "387543059434.dkr.ecr.ca-central-1.amazonaws.com/frontend-react-js",
+        "image": "528949102142.dkr.ecr.us-east-2.amazonaws.com/frontend-react-js",
         "essential": true,
         "portMappings": [
           {
@@ -26,7 +26,7 @@
           "logDriver": "awslogs",
           "options": {
               "awslogs-group": "cruddur",
-              "awslogs-region": "ca-central-1",
+              "awslogs-region": "us-east-2",
               "awslogs-stream-prefix": "frontend-react-js"
           }
         }

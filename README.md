@@ -31,3 +31,27 @@ The `/journal` directory contains
 - [ ] [Week 11](journal/week11.md)
 - [ ] [Week 12](journal/week12.md)
 - [ ] [Week 13](journal/week13.md)
+
+
+
+docker build \
+  --build-arg REACT_APP_BACKEND_URL="https://4567-$GITPOD_WORKSPACE_ID.$GITPOD_WORKSPACE_CLUSTER_HOST" \
+  --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
+  --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
+  --build-arg REACT_APP_AWS_USER_POOLS_ID="us-east-2_zAcasLaSM" \
+  --build-arg REACT_APP_CLIENT_ID="8m5n4jnsb597gger3q0ns4ijj" \
+  -t frontend-react-js \
+  -f Dockerfile.prod \
+  .
+
+
+
+docker build \
+  --build-arg REACT_APP_BACKEND_URL="cruddur-alb-537445443.us-east-2.elb.amazonaws.com:4567" \
+  --build-arg REACT_APP_AWS_PROJECT_REGION="$AWS_DEFAULT_REGION" \
+  --build-arg REACT_APP_AWS_COGNITO_REGION="$AWS_DEFAULT_REGION" \
+  --build-arg REACT_APP_AWS_USER_POOLS_ID="us-east-2_zAcasLaSM" \
+  --build-arg REACT_APP_CLIENT_ID="8m5n4jnsb597gger3q0ns4ijj" \
+  -t frontend-react-js \
+  -f Dockerfile.prod \
+  .
